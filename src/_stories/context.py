@@ -1,18 +1,8 @@
-import textwrap
 from collections import OrderedDict
 from decimal import Decimal
 
 from _stories.compat import indent
 from _stories.exceptions import MutationError
-
-
-ATTRIBUTE_ERROR_MSG = textwrap.dedent(
-    """
-    '{obj}' object has no attribute {attr}
-
-    {ctx!r}
-    """
-).strip()
 
 
 def make_context(contract, kwargs, history):
@@ -36,11 +26,11 @@ class Context(object):
             return self.__ns[name]
         except KeyError:
             raise AttributeError(
-                ATTRIBUTE_ERROR_MSG.format(obj="Context", attr=name, ctx=self)
+                missed_attribute_message.format(attribute=name, ctx=self)
             )
 
     def __setattr__(self, name, value):
-        raise MutationError(assign_attribute_message)
+        raise MutationError(redefine_attribute_message)
 
     def __delattr__(self, name):
         raise MutationError(delete_attribute_message)
@@ -115,10 +105,21 @@ def context_representation(ctx, repr_func=repr):
 # Messages.
 
 
-assign_attribute_message = """
+missed_attribute_message = """
+'Context' object has no attribute {attribute}
+
+{ctx!r}
+""".strip()
+
+
+# TODO: In the story with contract undefined and not yet assigned
+# attribute should has different error messages.
+
+
+redefine_attribute_message = """
 Context object is immutable.
 
-Use Success() keyword arguments to expand its scope.
+You can not change context attribute after it was assigned the first time.
 """.strip()
 
 
