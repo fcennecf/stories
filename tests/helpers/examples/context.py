@@ -9,7 +9,8 @@ from stories import Success
 
 class NormalMethod(object):
     def one(self, ctx):
-        return Success(foo=self.foo)
+        ctx.foo = self.foo
+        return Success()
 
 
 class AssignMethod(object):

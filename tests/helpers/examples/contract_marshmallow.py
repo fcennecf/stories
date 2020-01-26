@@ -38,17 +38,23 @@ class NormalMethod(object):
 
 class StringMethod(object):
     def one(self, ctx):
-        return Success(foo="1", bar=["2"])
+        ctx.foo = "1"
+        ctx.bar = ["2"]
+        return Success()
 
 
 class WrongMethod(object):
     def one(self, ctx):
-        return Success(foo="<boom>", bar=["<boom>"])
+        ctx.foo = "<boom>"
+        ctx.bar = ["<boom>"]
+        return Success()
 
 
 class UnknownMethod(object):
     def one(self, ctx):
-        return Success(spam="0", quiz="1")
+        ctx.spam = "0"
+        ctx.quiz = "1"
+        return Success()
 
 
 class ExceptionMethod(object):
@@ -58,8 +64,8 @@ class ExceptionMethod(object):
 
 class AliasMethod(object):
     def one(self, ctx):
-        value = {"key": "1"}
-        return Success(foo=value, bar=value, baz=value)
+        ctx.foo = ctx.bar = ctx.baz = {"key": "1"}
+        return Success()
 
 
 # Next child mixins.
@@ -83,7 +89,9 @@ class NormalParentMethod(object):
 
 class StringParentMethod(object):
     def before(self, ctx):
-        return Success(foo="1", bar=["2"])
+        ctx.foo = "1"
+        ctx.bar = ["2"]
+        return Success()
 
     def after(self, ctx):
         return Success()
@@ -110,7 +118,9 @@ class NormalRootMethod(object):
 
 class StringRootMethod(object):
     def start(self, ctx):
-        return Success(foo="1", bar=["2"])
+        ctx.foo = "1"
+        ctx.bar = ["2"]
+        return Success()
 
     def finish(self, ctx):
         return Success()
@@ -118,7 +128,10 @@ class StringRootMethod(object):
 
 class StringWideRootMethod(object):
     def start(self, ctx):
-        return Success(foo="1", bar=["2"], baz="1")
+        ctx.foo = "1"
+        ctx.bar = ["2"]
+        ctx.baz = "1"
+        return Success()
 
     def finish(self, ctx):
         return Success()

@@ -59,18 +59,18 @@ class Subscription:
 
     def find_category(self, ctx):
 
-        category = load_category(ctx.category_id)
-        return Success(category=category)
+        ctx.category = load_category(ctx.category_id)
+        return Success()
 
     def find_price(self, ctx):
 
-        price = load_price(ctx.price_id)
-        return Success(price=price)
+        ctx.price = load_price(ctx.price_id)
+        return Success()
 
     def find_profile(self, ctx):
 
-        profile = load_profile(ctx.profile_id)
-        return Success(profile=profile)
+        ctx.profile = load_profile(ctx.profile_id)
+        return Success()
 
     def check_balance(self, ctx):
 
@@ -88,13 +88,15 @@ class Subscription:
     def persist_subscription(self, ctx):
 
         expires = calculate_period(ctx.price.period)
-        subscription = create_subscription(ctx.profile, ctx.category, expires)
-        return Success(subscription=subscription)
+        ctx.subscription = create_subscription(ctx.profile, ctx.category, expires)
+        return Success()
 
     def send_subscription_notification(self, ctx):
 
-        notification = send_notification("subscription", ctx.profile, ctx.category.name)
-        return Success(notification=notification)
+        ctx.notification = send_notification(
+            "subscription", ctx.profile, ctx.category.name
+        )
+        return Success()
 
     def show_category(self, ctx):
 
@@ -117,7 +119,8 @@ class ShowCategory:
 
         subscription = load_subscription(ctx.category_id, ctx.profile_id)
         if subscription:
-            return Success(subscription=subscription)
+            ctx.subscription = subscription
+            return Success()
         else:
             return Failure(Errors.forbidden)
 
@@ -132,7 +135,8 @@ class ShowCategory:
 
         category = load_category(ctx.category_id)
         if category:
-            return Success(category=category)
+            ctx.category = category
+            return Success()
         else:
             return Failure(Errors.not_found)
 
