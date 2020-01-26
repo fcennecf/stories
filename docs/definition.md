@@ -34,18 +34,18 @@ it is a business process of the subscription to our service.
 ...
 ...     def find_category(self, ctx):
 ...
-...         category = load_category(ctx.category_id)
-...         return Success(category=category)
+...         ctx.category = load_category(ctx.category_id)
+...         return Success()
 ...
 ...     def find_price(self, ctx):
 ...
-...         price = load_price(ctx.price_id)
-...         return Success(price=price)
+...         ctx.price = load_price(ctx.price_id)
+...         return Success()
 ...
 ...     def find_profile(self, ctx):
 ...
-...         profile = load_profile(ctx.user_id)
-...         return Success(profile=profile)
+...         ctx.profile = load_profile(ctx.user_id)
+...         return Success()
 ...
 ...     def check_balance(self, ctx):
 ...
@@ -63,17 +63,17 @@ it is a business process of the subscription to our service.
 ...     def persist_subscription(self, ctx):
 ...
 ...         expires = calculate_period(ctx.price.period)
-...         subscription = create_subscription(
+...         ctx.subscription = create_subscription(
 ...             ctx.profile, ctx.category, expires
 ...         )
-...         return Success(subscription=subscription)
+...         return Success()
 ...
 ...     def send_subscription_notification(self, ctx):
 ...
-...         notification = send_notification(
+...         ctx.notification = send_notification(
 ...             "subscription", ctx.profile, ctx.category.name
 ...         )
-...         return Success(notification=notification)
+...         return Success()
 ...
 ...     def show_category(self, ctx):
 ...
@@ -132,7 +132,8 @@ To make failure handling a more manageable process we can define a
 ...
 ...         subscription = load_subscription(ctx.category_id, ctx.user_id)
 ...         if subscription:
-...             return Success(subscription=subscription)
+...             ctx.subscription = subscription
+...             return Success()
 ...         else:
 ...             return Failure(Errors.forbidden)
 ...
@@ -147,7 +148,8 @@ To make failure handling a more manageable process we can define a
 ...
 ...         category = load_category(ctx.category_id)
 ...         if category:
-...             return Success(category=category)
+...             ctx.category = category
+...             return Success()
 ...         else:
 ...             return Failure(Errors.not_found)
 ...
