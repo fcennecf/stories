@@ -16,9 +16,16 @@ def contracts():
         pass
 
     try:
-        import examples.contract_marshmallow
+        import examples.contract_marshmallow2
 
-        yield examples.contract_marshmallow
+        yield examples.contract_marshmallow2
+    except ImportError:
+        pass
+
+    try:
+        import examples.contract_marshmallow3
+
+        yield examples.contract_marshmallow3
     except ImportError:
         pass
 

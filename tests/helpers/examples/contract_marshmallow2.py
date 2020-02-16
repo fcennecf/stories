@@ -1,3 +1,4 @@
+from marshmallow import __version_info__
 from marshmallow import fields
 from marshmallow import Schema
 from marshmallow import utils
@@ -6,6 +7,10 @@ from stories import arguments
 from stories import story
 from stories import Success
 from stories.shortcuts import contract_in
+
+
+if __version_info__[0] != 2:
+    raise ImportError
 
 
 # We don't want to convert strings to unicode on Python 2.
